@@ -1,0 +1,74 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":separateMajorReleases",
+    ":prConcurrentLimit10"
+  ],
+  "labels": ["dependencies"],
+  "schedule": ["before 7am on Monday"],
+  "packageRules": [
+    {
+      "description": "Group all Quarkus dependencies",
+      "groupName": "quarkus",
+      "matchDatasources": ["maven"],
+      "matchPackagePrefixes": ["io.quarkus"]
+    },
+    {
+      "description": "Group all Spring Boot and Spring Framework dependencies",
+      "groupName": "spring",
+      "matchDatasources": ["maven"],
+      "matchPackagePrefixes": [
+        "org.springframework.boot",
+        "org.springframework"
+      ]
+    },
+    {
+      "description": "Group all testing dependencies",
+      "groupName": "testing",
+      "matchDatasources": ["maven"],
+      "matchPackagePrefixes": [
+        "org.junit",
+        "org.mockito",
+        "org.testcontainers"
+      ]
+    },
+    {
+      "description": "Group all Camunda 7 dependencies",
+      "groupName": "camunda7",
+      "matchDatasources": ["maven"],
+      "matchPackagePrefixes": ["org.camunda.bpm"]
+    },
+    {
+      "description": "Group all Camunda 8 / Zeebe dependencies",
+      "groupName": "camunda8",
+      "matchDatasources": ["maven"],
+      "matchPackagePrefixes": [
+        "io.camunda"
+      ]
+    },
+    {
+      "description": "Group Maven plugins",
+      "groupName": "maven-plugins",
+      "matchDatasources": ["maven"],
+      "matchPackagePrefixes": [
+        "org.apache.maven.plugins",
+        "com.diffplug.spotless",
+        "org.jacoco",
+        "org.codehaus.mojo"
+      ]
+    },
+    {
+      "description": "Group Lombok",
+      "groupName": "lombok",
+      "matchDatasources": ["maven"],
+      "matchPackageNames": ["org.projectlombok:lombok"]
+    },
+    {
+      "description": "Group JaCoCo",
+      "groupName": "jacoco",
+      "matchDatasources": ["maven"],
+      "matchPackagePrefixes": ["org.jacoco"]
+    }
+  ]
+}
