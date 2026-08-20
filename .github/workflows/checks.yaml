@@ -1,0 +1,29 @@
+name: Checks
+"on":
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  # This preset is read by every VanillaBP repository, so a typo in it does not break one
+  # build, it stops dependency updates everywhere at once - and Renovate reports that in
+  # its own logs rather than in anybody's pull request. The validator is therefore the one
+  # check this repository needs.
+  renovate-configuration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Install Renovate
+        run: npm install --no-save --no-audit --no-fund renovate
+      - name: Validate the shareable preset
+        # the validator decides by file name what it is looking at, so the preset is
+        # checked as what a downstream repository will read it as
+        run: |
+          mkdir -p target/preset
+          cp default.json target/preset/renovate.json
+          (cd target/preset && npx --no-install renovate-config-validator --strict)
