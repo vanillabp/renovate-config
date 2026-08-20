@@ -7,55 +7,54 @@
   ],
   "labels": ["dependencies"],
   "schedule": ["before 7am on Monday"],
+  "minimumReleaseAge": "5 days",
   "packageRules": [
     {
       "description": "Group all Quarkus dependencies",
       "groupName": "quarkus",
       "matchDatasources": ["maven"],
-      "matchPackagePrefixes": ["io.quarkus"]
+      "matchPackageNames": ["io.quarkus{/,}**"]
     },
     {
       "description": "Group all Spring Boot and Spring Framework dependencies",
       "groupName": "spring",
       "matchDatasources": ["maven"],
-      "matchPackagePrefixes": [
-        "org.springframework.boot",
-        "org.springframework"
+      "matchPackageNames": [
+        "org.springframework.boot{/,}**",
+        "org.springframework{/,}**"
       ]
     },
     {
       "description": "Group all testing dependencies",
       "groupName": "testing",
       "matchDatasources": ["maven"],
-      "matchPackagePrefixes": [
-        "org.junit",
-        "org.mockito",
-        "org.testcontainers"
+      "matchPackageNames": [
+        "org.junit{/,}**",
+        "org.mockito{/,}**",
+        "org.testcontainers{/,}**"
       ]
     },
     {
       "description": "Group all Camunda 7 dependencies",
       "groupName": "camunda7",
       "matchDatasources": ["maven"],
-      "matchPackagePrefixes": ["org.camunda.bpm"]
+      "matchPackageNames": ["org.camunda.bpm{/,}**"]
     },
     {
       "description": "Group all Camunda 8 / Zeebe dependencies",
       "groupName": "camunda8",
       "matchDatasources": ["maven"],
-      "matchPackagePrefixes": [
-        "io.camunda"
-      ]
+      "matchPackageNames": ["io.camunda{/,}**"]
     },
     {
       "description": "Group Maven plugins",
       "groupName": "maven-plugins",
       "matchDatasources": ["maven"],
-      "matchPackagePrefixes": [
-        "org.apache.maven.plugins",
-        "com.diffplug.spotless",
-        "org.jacoco",
-        "org.codehaus.mojo"
+      "matchPackageNames": [
+        "org.apache.maven.plugins{/,}**",
+        "com.diffplug.spotless{/,}**",
+        "org.jacoco{/,}**",
+        "org.codehaus.mojo{/,}**"
       ]
     },
     {
@@ -68,7 +67,61 @@
       "description": "Group JaCoCo",
       "groupName": "jacoco",
       "matchDatasources": ["maven"],
-      "matchPackagePrefixes": ["org.jacoco"]
+      "matchPackageNames": ["org.jacoco{/,}**"]
+    },
+    {
+      "description": "A patch merges itself once the required checks passed. The builds of these repositories run their own tests against a real engine or cluster, so a green pipeline is a strong statement for a patch. What that statement does not cover is listed in the rules below, which come after this one and therefore win.",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "Tools and test libraries merge themselves for a minor as well: they never reach a released artifact, and a break shows up as a red build rather than as behaviour in production.",
+      "matchDatasources": ["maven"],
+      "matchPackageNames": [
+        "org.junit{/,}**",
+        "org.mockito{/,}**",
+        "org.testcontainers{/,}**",
+        "org.apache.maven.plugins{/,}**",
+        "com.diffplug.spotless{/,}**",
+        "org.jacoco{/,}**",
+        "org.codehaus.mojo{/,}**",
+        "org.projectlombok:lombok"
+      ],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "The workflows of the repository are covered by the run that uses them, so a minor and a digest merge themselves too.",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "The Spring Boot and Quarkus versions are a promise: the README of each repository names the platform versions it is built against, and an application picks them itself. Moving one is a decision about what is supported, so it is read and merged by a person even when the build is green.",
+      "matchDatasources": ["maven"],
+      "matchPackageNames": [
+        "org.springframework{/,}**",
+        "org.springframework.boot{/,}**",
+        "io.quarkus{/,}**"
+      ],
+      "automerge": false
+    },
+    {
+      "description": "The BPMS itself is never merged by a robot. The engine or the client a build was compiled against decides which server versions the artifact accepts, which is a statement about every application that consumes it, and a green build says nothing about the clusters nobody here runs. The Camunda 8 adapter refines this per release line in its own configuration.",
+      "matchDatasources": ["maven"],
+      "matchPackageNames": [
+        "org.camunda.bpm{/,}**",
+        "io.camunda{/,}**"
+      ],
+      "automerge": false
+    },
+    {
+      "description": "A major is read by a person. It is the update where a green build proves the least, since nothing compiles differently until something behaves differently.",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
     }
   ]
 }
