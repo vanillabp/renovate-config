@@ -1,11 +1,13 @@
 name: Renovate
 "on":
-  schedule:
-    # 01:00 UTC is 03:00 in Europe/Vienna during summer time and 02:00 in winter, so the
-    # Monday run of this workflow falls inside the window the preset allows a pull request
-    # in (Monday before 7am). Running daily rather than weekly costs nothing and means a
-    # missed run is one day late instead of one week.
-    - cron: "0 1 * * *"
+  # NO SCHEDULE while the hosted Mend app is installed on this organisation. Two Renovate
+  # instances on one repository use the same 'renovate/*' branches and the same dependency
+  # dashboard, so whichever runs last overwrites the other. Until it is decided which of the
+  # two stays, this workflow starts only when somebody asks it to.
+  #
+  # The schedule this had, for putting it back: 'cron: "0 1 * * *"'. 01:00 UTC is 03:00 in
+  # Europe/Vienna during summer time, which puts the Monday run inside the window the preset
+  # allows a pull request in.
   workflow_dispatch:
     inputs:
       dryRun:

@@ -61,9 +61,18 @@ matrix runs nightly. A patch that only breaks another line is merged and shows u
 
 ## Who runs it
 
-Renovate does not appear by itself. Two ways exist: the app Mend hosts, which needs an account
-there, and a Renovate process of our own, which needs a token. This organisation takes the second
-way, in `.github/workflows/renovate.yaml`.
+Renovate does not appear by itself. Two ways exist: the app Mend hosts, and a Renovate process of
+our own. Right now the hosted app is installed on this organisation, and it is what opens the pull
+requests. Its scope, meaning which repositories it may touch, is set in GitHub rather than at Mend:
+organisation settings, GitHub Apps, Renovate, Configure. An account at Mend is not needed for that,
+their portal link in every dependency dashboard is an offer and not a requirement.
+
+The process of our own lives in `.github/workflows/renovate.yaml` and is DORMANT: it has no
+schedule and starts only when somebody dispatches it. It exists because the hosted app had reached
+exactly one of six repositories for months, and because a token we grant and revoke ourselves is
+the fallback if the app stops covering everything. Whichever of the two stays, the other has to go:
+both use the same `renovate/*` branches and the same dashboard, and the one running last overwrites
+the other.
 
 That workflow runs daily and processes the whole organisation, so a new repository joins by
 committing a `renovate.json` which extends this preset. A repository without one is skipped rather
