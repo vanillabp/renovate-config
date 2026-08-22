@@ -58,3 +58,29 @@ required check before relying on this.
 
 One residual risk is worth knowing: a pull request builds the current release line, while the whole
 matrix runs nightly. A patch that only breaks another line is merged and shows up in the night.
+
+## Who runs it
+
+Renovate does not appear by itself. Two ways exist: the app Mend hosts, which needs an account
+there, and a Renovate process of our own, which needs a token. This organisation takes the second
+way, in `.github/workflows/renovate.yaml`.
+
+That workflow runs daily and processes the whole organisation, so a new repository joins by
+committing a `renovate.json` which extends this preset. A repository without one is skipped rather
+than offered an onboarding pull request, which keeps archived experiments and read-only mirrors out.
+The runner brings no rules of its own; `self-hosted.js` says which repositories to look at, and
+everything about WHAT is updated stays in the preset.
+
+Two things it needs from a person:
+
+- the secret `RENOVATE_TOKEN`, a token with `repo` and `workflow`. The second scope is what allows
+  Renovate to fix a pinned GitHub Action; without it a deprecated action is reported and never
+  touched.
+- a first run with the `dryRun` input of the workflow set. It logs every decision and writes
+  nothing, which is the cheapest way to see whether the preset does what its description claims
+  before twenty pull requests appear at once.
+
+The blueprints live in an organisation of their own and have their own runner, for one repository
+only: `vanillabp-blueprints/blueprints`. The blueprint repositories next to it are read-only
+mirrors, force-pushed from that monorepo by its split job, so a pull request against one of them
+would be overwritten by the next split.
