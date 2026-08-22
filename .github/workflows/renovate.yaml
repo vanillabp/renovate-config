@@ -1,0 +1,39 @@
+name: Renovate
+"on":
+  schedule:
+    # 01:00 UTC is 03:00 in Europe/Vienna during summer time and 02:00 in winter, so the
+    # Monday run of this workflow falls inside the window the preset allows a pull request
+    # in (Monday before 7am). Running daily rather than weekly costs nothing and means a
+    # missed run is one day late instead of one week.
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: "Report what would happen, create and change nothing"
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  # Renovate does not run itself for these repositories: the hosted app of Mend asks for an
+  # account there, this asks for a token. The token is what we can scope, rotate and see the
+  # log of, so this is the half we own.
+  #
+  # It processes the whole organisation, not this repository. What a repository gets is
+  # decided by its own renovate.json, which extends the preset next to this workflow; a
+  # repository without one is skipped (see self-hosted.js).
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: renovatebot/github-action@v46.2.2
+        with:
+          configurationFile: self-hosted.js
+          # A token with 'repo' AND 'workflow': without the second scope Renovate can read
+          # a workflow file that pins an outdated action but not fix it, which is how
+          # actions/setup-python@v5 survived on Node 20 in four workflows.
+          token: "${{ secrets.RENOVATE_TOKEN }}"
+        env:
+          # 'full' logs every decision without writing anything - the first run of a new
+          # setup, and the way to answer "why did it not propose that" later.
+          RENOVATE_DRY_RUN: "${{ inputs.dryRun && 'full' || '' }}"
