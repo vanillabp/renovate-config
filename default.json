@@ -39,12 +39,14 @@
     {
       "description": "Group all Camunda 7 dependencies",
       "groupName": "camunda7",
+      "separateMinorPatch": true,
       "matchDatasources": ["maven"],
       "matchPackageNames": ["org.camunda.bpm{/,}**"]
     },
     {
       "description": "Group all Camunda 8 / Zeebe dependencies",
       "groupName": "camunda8",
+      "separateMinorPatch": true,
       "matchDatasources": ["maven"],
       "matchPackageNames": ["io.camunda{/,}**"]
     },
@@ -126,12 +128,31 @@
       "automerge": false
     },
     {
-      "description": "The BPMS itself is never merged by a robot. The engine or the client a build was compiled against decides which server versions the artifact accepts, which is a statement about every application that consumes it, and a green build says nothing about the clusters nobody here runs. The Camunda 8 adapter refines this per release line in its own configuration.",
+      "description": "A patch of the BPMS stays inside the line a build already requires, and the builds of these repositories run their tests against a real engine or cluster of that line, so it merges itself like every other patch. It is grouped apart from the minor next to it, which is not going to merge itself.",
+      "matchDatasources": ["maven"],
+      "matchPackageNames": ["org.camunda.bpm{/,}**"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "camunda7 patches",
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "The same for Camunda 8. The Camunda 8 adapter maintains a pin per release line and takes those out of this group in its own configuration, so what is left here are the ordinary io.camunda dependencies of a repository.",
+      "matchDatasources": ["maven"],
+      "matchPackageNames": ["io.camunda{/,}**"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "camunda8 patches",
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "A minor of the BPMS is never merged by a robot. The engine or the client a build was compiled against decides which server versions the artifact accepts, which is a statement about every application that consumes it, and a green build says nothing about the clusters nobody here runs. The Camunda 8 adapter refines this per release line in its own configuration. A major is covered by the last rule of this file.",
       "matchDatasources": ["maven"],
       "matchPackageNames": [
         "org.camunda.bpm{/,}**",
         "io.camunda{/,}**"
       ],
+      "matchUpdateTypes": ["minor"],
       "automerge": false
     },
     {
