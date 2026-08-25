@@ -33,16 +33,17 @@ Reference this preset in a project's `renovate.json`:
 Confirming a Maven plugin bump by hand teaches nobody anything, so the noisy part of the stream
 merges itself once the required checks passed:
 
-- every patch, whatever it belongs to
+- every patch, whatever it belongs to, Spring Boot and Quarkus included
 - tools and test libraries (JUnit, Mockito, Testcontainers, the Maven plugins, Spotless, JaCoCo,
   Lombok) for a minor as well, since they never reach a released artifact
 - GitHub Actions for a minor, a patch and a digest
 
 Three kinds of update stay with a person, and each for its own reason:
 
-- **Spring Boot and Quarkus**, because the README of every repository names the platform versions
-  it is built against. Moving one changes what is supported, and that is a decision rather than an
-  update.
+- **A minor of Spring Boot or Quarkus**, because the README of every repository names the platform
+  versions it is built against. Moving the line changes what is supported, and that is a decision
+  rather than an update. Their patches ride in a pull request of their own, because a group
+  is only as fast as the slowest thing in it and this minor is never going to merge itself.
 - **The BPMS**, meaning `org.camunda.bpm` and `io.camunda`. The engine respectively the client a
   build was compiled against decides which servers the artifact accepts, so this bump reaches every
   application consuming it. The Camunda 8 adapter refines the rule per release line in its own
