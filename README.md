@@ -15,7 +15,10 @@ Reference this preset in a project's `renovate.json`:
 
 ## What it does
 
-- **Schedule**: Dependency update PRs are created weekly (Monday before 7am)
+- **Schedule**: pull requests are opened every night between 22:00 and 06:00, `Europe/Vienna`,
+  weekends included. At most five per repository and hour, so a backlog arrives over a few nights
+  rather than as one night of builds. Merging keeps no window: a build which turns green after
+  breakfast still merges its pull request.
 - **Grouping**: Related dependencies are grouped into single PRs:
   - Quarkus (all `io.quarkus` packages)
   - Spring (all `org.springframework` packages)
@@ -26,7 +29,9 @@ Reference this preset in a project's `renovate.json`:
   - Lombok
 - **Major versions**: Major updates get separate PRs from minor/patch updates
 - **Age**: an update is proposed once its release is five days old, so a version pulled back
-  shortly after publication never reaches a repository
+  shortly after publication never reaches a repository. Where the datasource reports no publication
+  date the update goes ahead without waiting, because the alternative is Renovate parking it
+  forever and saying so in a place that reads like a pending build
 
 ## What merges itself
 
