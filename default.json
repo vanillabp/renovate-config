@@ -5,9 +5,19 @@
     ":separateMajorReleases",
     ":prConcurrentLimit10"
   ],
+  "description": [
+    "Updates arrive every night between ten in the evening and six in the morning, Vienna time, weekends included. A weekly window looked cheaper and was not: Renovate picks its own moment to look at a repository, and a look which landed outside the seven hours of a Monday morning cost that repository a whole week. Four of the five repositories reading this preset went untouched on the last such Monday while their dashboards filled up.",
+    "The window lives here rather than in each repository, and so does the time zone, because a repository which copies the first and forgets the second silently keeps the window in UTC.",
+    "Automerging keeps no window of its own. A pull request opened at three whose build turns green at seven is still merged, which is why 'automergeSchedule' is left at its default.",
+    "Five pull requests per hour. The runner budget belongs to the whole organisation, and a backlog of fifteen updates across five repositories would spend a night of it at once. Draining the queue over a few nights arrives at the same place for less. The default of two was never a decision, and it is what let one repository merge two updates in a week while the rest of its queue sat until the next Monday.",
+    "'minimumReleaseAgeBehaviour' is loosened because the strict default blocks silently. A release whose datasource reports no publication date can never become five days old, so Renovate parks it as pending and lists it on the dashboard under a heading which reads like a build is running. Every repository had 'actions/setup-java v6' stuck there. What tolerating a missing date costs is the waiting period for those releases, and that is the smaller loss."
+  ],
   "labels": ["dependencies"],
-  "schedule": ["before 7am on Monday"],
+  "timezone": "Europe/Vienna",
+  "schedule": ["* 22-23,0-5 * * *"],
+  "prHourlyLimit": 5,
   "minimumReleaseAge": "5 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
   "packageRules": [
     {
       "description": "Group all Quarkus dependencies",
