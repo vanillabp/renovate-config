@@ -31,7 +31,17 @@ Reference this preset in a project's `renovate.json`:
 - **Age**: an update is proposed once its release is five days old, so a version pulled back
   shortly after publication never reaches a repository. Where the datasource reports no publication
   date the update goes ahead without waiting, because the alternative is Renovate parking it
-  forever and saying so in a place that reads like a pending build
+  forever and saying so in a place that reads like a pending build. The two rules together mean the
+  same kind of patch can show up after twelve hours or after five days, and the version itself does
+  not say which case it is.
+
+### No pull request yet: waiting or blocked
+
+An update which is only waiting for its age is listed on the Dependency Dashboard of the repository
+under the heading "Pending Status Checks". That heading reads as if a build were running. It is
+not. It means Renovate has the branch and will open the pull request once the release is five days
+old. So a missing pull request under that heading is time and not a block, and the dashboard is the
+one place which tells the two apart.
 
 ## What merges itself
 
