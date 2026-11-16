@@ -115,6 +115,11 @@
       "platformAutomerge": true
     },
     {
+      "description": "The JDK of the workflows is written as '25.0.5+8', not as '25.0.5+8.0.LTS' which the Adoptium API reports. setup-java matches a version with a build number exactly against the runner's tool cache, which spells it the short way. With the long spelling every job downloads the JDK from GitHub's release storage, and a 504 there turned a whole night of builds red. This keeps an update in the short spelling.",
+      "matchDatasources": ["java-version"],
+      "extractVersion": "^(?<version>\\d+\\.\\d+\\.\\d+\\+\\d+)"
+    },
+    {
       "description": "A patch of Spring Boot or Quarkus is upkeep inside the line a repository already promises, so it merges itself like every other patch. It travels in a pull request of its own because the minor above it waits for a person, and a group is only as fast as the slowest thing in it.",
       "matchDatasources": ["maven"],
       "matchPackageNames": [

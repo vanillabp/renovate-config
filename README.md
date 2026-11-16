@@ -34,6 +34,10 @@ Reference this preset in a project's `renovate.json`:
   forever and saying so in a place that reads like a pending build. The two rules together mean the
   same kind of patch can show up after twelve hours or after five days, and the version itself does
   not say which case it is.
+- **JDK spelling**: a JDK update in a workflow keeps the short spelling `25.0.5+8` instead of
+  `25.0.5+8.0.LTS`, the form the Adoptium API reports. `setup-java` finds only the short form in the
+  tool cache of the runner; with the long one every job downloads the JDK from GitHub's release
+  storage, and fails when that storage does.
 
 ### No pull request yet: waiting or blocked
 
