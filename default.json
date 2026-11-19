@@ -120,6 +120,11 @@
       "extractVersion": "^(?<version>\\d+\\.\\d+\\.\\d+\\+\\d+)"
     },
     {
+      "description": "Adoptium's hotfix jdk-25.0.5.1+2 reaches Renovate as '25.0.5+100000002'. No JDK carries that version, so setup-java cannot find it and every build of such a pull request fails before it starts. Only this one version is left out. Closing its pull requests instead would make Renovate ignore every later 25.x update of the repository.",
+      "matchDatasources": ["java-version"],
+      "allowedVersions": "!/^25\\.0\\.5\\+100000002$/"
+    },
+    {
       "description": "A patch of Spring Boot or Quarkus is upkeep inside the line a repository already promises, so it merges itself like every other patch. It travels in a pull request of its own because the minor above it waits for a person, and a group is only as fast as the slowest thing in it.",
       "matchDatasources": ["maven"],
       "matchPackageNames": [
