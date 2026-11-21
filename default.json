@@ -131,6 +131,11 @@
       "enabled": false
     },
     {
+      "description": "Maven stays on 3.9. Under Maven 3.10 the central publishing plugin puts maven-metadata-local.xml and _remote.repositories into the bundle, and the Central Portal refuses it. 3.10 also breaks the Quarkus build of the business cockpit. This holds the wrapper and every other place Renovate finds Maven below 3.10, until a person moves it.",
+      "matchPackageNames": ["org.apache.maven:apache-maven"],
+      "allowedVersions": "<3.10"
+    },
+    {
       "description": "A patch of Spring Boot or Quarkus is upkeep inside the line a repository already promises, so it merges itself like every other patch. It travels in a pull request of its own because the minor above it waits for a person, and a group is only as fast as the slowest thing in it.",
       "matchDatasources": ["maven"],
       "matchPackageNames": [
